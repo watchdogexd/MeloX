@@ -167,13 +167,21 @@ final class AutoMixDeckTransitionController {
     }
 
     func reset() {
-        cancel(wantsPlayback: false)
+        wantsPlayback = false
+        preparationGeneration += 1
+        envelopeTask?.cancel()
+        envelopeTask = nil
+        preparedTransition = nil
+        activeTransition = nil
+
+        // Clear directly so teardown cannot publish the outgoing playback position.
         for deck in decks {
             deck.clear()
         }
         activeDeckIndex = 0
         deckGains = [1, 0]
         applyOutputVolumes()
+        onTransitionProgress?(0)
     }
 
     func setVolume(_ volume: Double) {

@@ -1011,6 +1011,8 @@ final class PlayerStore {
         cancelAutoMixPreparation()
         loadGeneration += 1
         let generation = loadGeneration
+        // Finish the old item before publishing the next song's timeline.
+        engine.unload()
         currentSong = song
         let cachedDetailedSong = detailedPlaybackSongs[song.id]
         resolveCurrentSongAudioAvailability(
@@ -1038,7 +1040,6 @@ final class PlayerStore {
             nowPlayingLyrics = []
             publishedNowPlayingLyricID = nil
         }
-        engine.unload()
         nowPlayingSession.setSong(
             song,
             duration: duration,
